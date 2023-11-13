@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Lights from Python Script
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/Documents/led.py
+WorkingDirectory=/home/pi/Documents
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
