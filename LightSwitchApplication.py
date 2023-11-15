@@ -16,6 +16,7 @@ from dim_timer_state import DimTimerState
 from idlestate import IdleState
 from toggle_timer_state import ToggleTimerState
 from color_switcher import ColorSwitcherState
+from dimmer_state import DimmerState
 
 def calculate_delay(start_time):
     new_time = time.monotonic()
@@ -44,6 +45,7 @@ event_handler.register_state(IdleState)
 event_handler.register_state(DimTimerState)
 event_handler.register_state(ToggleTimerState)
 event_handler.register_state(ColorSwitcherState)
+event_handler.register_state(DimmerState)
 
 # set handler initial state
 event_handler.set_state('idle')

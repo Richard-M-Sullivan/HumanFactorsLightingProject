@@ -8,11 +8,11 @@ class IdleState (StateHandler):
         self.queue = queue
 
     def initialize(self):
-        pass
+        print('idle state initialized')
 
     def handle_event(self, event):
         if event._type == 'cord' and event.data == 'down':
-            print(f'cord down, so set state to dim_timer')
+            print(f'cord down, set state to dim_timer')
             self.fsm.set_state('dim_timer')
 
         else:

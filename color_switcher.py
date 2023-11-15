@@ -1,13 +1,13 @@
-import asyncio
-
 from event import Event
 from fsmhandler.fsm import StateHandler
+from threading import Timer
 
 class ColorSwitcherState (StateHandler):
     def __init__(self, fsm, queue):
         self.name = 'color_switcher'
         self.fsm = fsm
         self.queue = queue
+        self.color_timer = None
 
         self.current_color = 0
         self.colors = [
@@ -28,13 +28,16 @@ class ColorSwitcherState (StateHandler):
 
     def handle_event(self, event):
         if event._type == 'cord' and event.data == 'down':
+            self.color_timer.cancel()
             self.change_color()
 
         elif event._type == 'cord' and event.data == 'up':
-            print(f'cord up, need to toggle color timer')
+            print(f'cord up, color timer started')
+            self.color_timer = Timer(0.75, self.push_timer_event)
+            self.color_timer.start()
 
         elif event._type == 'timer' and event.data == 'color':
-            print(f'timer color, need to set state to idle')
+            print(f'timer color, set state to idle')
             self.fsm.set_state('idle')
 
         else:
@@ -42,7 +45,7 @@ class ColorSwitcherState (StateHandler):
 
 
     def push_timer_event(self):
-        new_event = Event('timer','toggle')
+        new_event = Event('timer','color')
         self.queue.put(new_event)
 
 
