@@ -15,8 +15,9 @@ loop.call_soon(hello_world, loop)
 loop.run_forever()
 loop.close()
 
+queue = Queue()
 
-event_handler = FSMEventHandler()
+event_handler = FSMEventHandler(queue)
 
 event_handler.register_state(IdleState())
 
