@@ -28,6 +28,7 @@ def calculate_delay(start_time):
     return delay
     
 pygame.init()
+screen = pygame.display.set_mode((300, 300))
 
 # create the event queue
 event_queue = EventQueue()
