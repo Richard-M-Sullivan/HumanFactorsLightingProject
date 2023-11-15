@@ -1,12 +1,14 @@
 # default handler base class. does nothing to handle events
 class StateHandler:
-    def __init__(self):
+    def __init__(self,fsm,queue):
         self.name = 'default'
+        self.queue = queue
+        self.fsm = fsm
 
     def __str__(self):
         return f'{self.name}'
 
-    def initialize(self):
+    def initialize(self, event=None):
         pass
 
     def handle_event(self, event):
@@ -21,18 +23,21 @@ class StateHandler:
 class FSMEventHandler:
 
     # initialize event handler with the default state handler
-    def __init__(self, state=StateHandler()):
-        self.state = state
+    def __init__(self, queue, state_handle=StateHandler):
+        self.queue = queue
+        self.state = None # this gets set to default state handler obj in set state
         self.state_registry = {}
 
-        self.register_state(state)
+        self.register_state(state_handle)
+        self.set_state('default')
 
     # str prints the event handler and the current state that it is in
     def __str__(self):
         return f'FSMEventHandler:\n{str(self.state)}'
 
     # add the state to the state registry using the state's name as the key
-    def register_state(self,state):
+    def register_state(self,state_handle):
+        state = state_handle(self, self.queue)
         self.state_registry[state.name] = state
 
     # this sets the state of the handler by accessing a saved state in the
@@ -43,11 +48,5 @@ class FSMEventHandler:
     
     # handle event
     def handle_event(self,event):
-        # if the event handler needs to change states, then handle event
-        if event['type'] == 'change_state':
-            self.set_state(event['data'])
-
-        # otherwise delegate state handling to the state handler
-        else:
             self.state.handle_event(event)
 
