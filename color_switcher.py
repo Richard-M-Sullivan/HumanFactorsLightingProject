@@ -23,6 +23,7 @@ class ColorSwitcherState (StateHandler):
         
 
     def initialize(self):
+        print('swithing colors\n')
         self.change_color()
 
 
@@ -32,16 +33,12 @@ class ColorSwitcherState (StateHandler):
             self.change_color()
 
         elif event._type == 'cord' and event.data == 'up':
-            print(f'cord up, color timer started')
             self.color_timer = Timer(0.75, self.push_timer_event)
             self.color_timer.start()
 
         elif event._type == 'timer' and event.data == 'color':
-            print(f'timer color, set state to idle')
+            print()
             self.fsm.set_state('idle')
-
-        else:
-            print(f'event not handled by me bro')
 
 
     def push_timer_event(self):

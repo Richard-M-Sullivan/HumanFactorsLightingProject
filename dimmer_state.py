@@ -12,6 +12,7 @@ class DimmerState (StateHandler):
         self.dimmer_timer = None
 
     def initialize(self):
+        print('dimming\n')
         self.brightness = 0
         self.dim_light()
 
@@ -21,17 +22,13 @@ class DimmerState (StateHandler):
 
     def handle_event(self, event):
         if event._type == 'cord' and event.data == 'up':
-            print(f'cord up, need to go to idle state')
+            print()
             self.fsm.set_state('idle')
 
         elif event._type == 'timer' and event.data == 'dimmer':
-            print(f'timer dimmer, need to dim the light')
             self.dim_light()
             self.dimmer_timer = Timer(1, self.push_timer_event)
             self.dimmer_timer.start()
-
-        else:
-            print(f'event not handled by me bro')
 
 
     def push_timer_event(self):
