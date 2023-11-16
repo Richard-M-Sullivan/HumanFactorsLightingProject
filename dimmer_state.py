@@ -1,3 +1,5 @@
+import light_controller
+
 from event import Event
 from fsmhandler.fsm import StateHandler
 from threading import Timer
@@ -26,6 +28,7 @@ class DimmerState (StateHandler):
             self.fsm.set_state('idle')
 
         elif event._type == 'timer' and event.data == 'dimmer':
+            self.brightness += 1
             self.dim_light()
             self.dimmer_timer = Timer(1, self.push_timer_event)
             self.dimmer_timer.start()
@@ -37,7 +40,13 @@ class DimmerState (StateHandler):
 
 
     def dim_light(self):
-        self.brightness = self.brightness+10 if self.brightness+10 < 255 else 0
-        print(f'brightness set to {self.brightness}')
+        self.brightness = self.brightness if self.brightness < 10 else 0
+    
+        if self.brightness == 0:
+            light_controller.trigger_endpoint('off')
+        else:
+            light_controller.trigger_endpoint('brightness')
+
+        print(f'brightness set to {self.brightness}/10')
 
 

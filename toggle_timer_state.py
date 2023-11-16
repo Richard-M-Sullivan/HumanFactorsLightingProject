@@ -1,3 +1,4 @@
+import light_controller
 
 from event import Event
 from fsmhandler.fsm import StateHandler
@@ -23,6 +24,7 @@ class ToggleTimerState (StateHandler):
 
         elif event._type == 'timer' and event.data == 'toggle':
             print('toggling light\n')
+            light_controller.trigger_endpoint('toggle')
             self.fsm.set_state('idle')
 
 

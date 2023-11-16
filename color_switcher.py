@@ -1,3 +1,5 @@
+import light_controller
+
 from event import Event
 from fsmhandler.fsm import StateHandler
 from threading import Timer
@@ -17,8 +19,8 @@ class ColorSwitcherState (StateHandler):
             'yellow',
             'green',
             'blue',
-            'indigo',
-            'violet',
+            'purple',
+            'pink',
         ]
         
 
@@ -48,5 +50,6 @@ class ColorSwitcherState (StateHandler):
 
     def change_color(self):
         self.current_color = (self.current_color + 1) % len(self.colors)
+        light_controller.trigger_endpoint(self.colors[self.current_color])
         print(f'color set to {self.colors[self.current_color]}')
 
