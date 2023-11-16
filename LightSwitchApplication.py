@@ -1,6 +1,6 @@
 # standard lib includes 
+import argparse
 import asyncio
-import pygame
 import random
 import time
 
@@ -18,6 +18,16 @@ from toggle_timer_state import ToggleTimerState
 from color_switcher import ColorSwitcherState
 from dimmer_state import DimmerState
 
+parser = argparse.ArgumentParser(description='program to control a light in home assistant')
+parser.add_argument('-k', action='store_true', help='this option enables input from the spacebar')
+args = parser.parse_args()
+
+# conditional imports
+if args.k:
+    import pygame
+else:
+    from button_event_generator import ButtonEventGenerator
+
 def calculate_delay(start_time):
     new_time = time.monotonic()
     delta_time = new_time - start_time
@@ -28,14 +38,18 @@ def calculate_delay(start_time):
     
     return delay
     
-pygame.init()
-screen = pygame.display.set_mode((300, 300))
+if args.k:
+    pygame.init()
+    screen = pygame.display.set_mode((300, 300))
 
 # create the event queue
 event_queue = EventQueue()
 
 #create keyboard event generator
-keyboard_event_generator = KeyEventGenerator(event_queue)
+if args.k:
+    keyboard_event_generator = KeyEventGenerator(event_queue)
+else:
+    button_event_generator = ButtonEventGenerator(2,event_queue)
 
 # create the event handler
 event_handler = FSMEventHandler(event_queue)
