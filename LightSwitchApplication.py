@@ -72,13 +72,15 @@ cord_up = Event('cord','up')
 for i in range(60*30):
     start_time = time.monotonic()
     # get input
-    keyboard_event_generator.generate_event()
-    pygame.event.pump()
+    if args.k:
+        keyboard_event_generator.generate_event()
+        pygame.event.pump()
     # process input
     while event_queue.qsize() > 0:
         event_handler.handle_event(event_queue.get())
     # sleep so the loop runs 60 times a second
     time.sleep(calculate_delay(start_time))
     
-pygame.quit()
+if args.k:
+    pygame.quit()
 
