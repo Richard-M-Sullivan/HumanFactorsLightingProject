@@ -8,7 +8,6 @@ import time
 from event import Event
 from fsmhandler.fsm import FSMEventHandler
 from fsmhandler.fsm import StateHandler
-from keyboard_event_maker import KeyEventGenerator
 from queue import Queue as EventQueue
 
 # custom states
@@ -25,8 +24,14 @@ args = parser.parse_args()
 # conditional imports
 if args.k:
     import pygame
+    pygame.init()
+    screen = pygame.display.set_mode((300, 300))
+
+    from keyboard_event_maker import KeyEventGenerator
+
 else:
     from button_event_generator import ButtonEventGenerator
+
 
 def calculate_delay(start_time):
     new_time = time.monotonic()
@@ -38,18 +43,16 @@ def calculate_delay(start_time):
     
     return delay
     
-if args.k:
-    pygame.init()
-    screen = pygame.display.set_mode((300, 300))
 
 # create the event queue
 event_queue = EventQueue()
 
-#create keyboard event generator
+#create event generator
+event_generator = None
 if args.k:
-    keyboard_event_generator = KeyEventGenerator(event_queue)
+    event_generator = KeyEventGenerator(event_queue)
 else:
-    button_event_generator = ButtonEventGenerator(2,event_queue)
+    event_generator = ButtonEventGenerator(2,event_queue)
 
 # create the event handler
 event_handler = FSMEventHandler(event_queue)
@@ -64,17 +67,12 @@ event_handler.register_state(DimmerState)
 # set handler initial state
 event_handler.set_state('idle')
 
-# create events
-random_event = Event('wow','super cool')
-cord_down = Event('cord','down')
-cord_up = Event('cord','up')
 
-for i in range(60*30):
+while True:
     start_time = time.monotonic()
     # get input
-    if args.k:
-        keyboard_event_generator.generate_event()
-        pygame.event.pump()
+    event_generator.generate_event()
+
     # process input
     while event_queue.qsize() > 0:
         event_handler.handle_event(event_queue.get())
