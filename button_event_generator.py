@@ -1,4 +1,4 @@
-from  event import Event
+from  fsmhandler.event import Event
 from gpiozero import Button
 
 class ButtonEventGenerator:

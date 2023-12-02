@@ -1,4 +1,4 @@
-from event import Event
+from fsmhandler.event import Event
 from fsmhandler.fsm import StateHandler
 
 class IdleState (StateHandler):

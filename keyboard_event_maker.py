@@ -1,6 +1,6 @@
 import pygame
 
-from event import Event
+from fsmhandler.event import Event
 from pygame.key import get_pressed
 from pygame.locals import *
 from queue import Queue

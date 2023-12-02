@@ -5,17 +5,17 @@ import random
 import time
 
 # imported tools
-from event import Event
+from fsmhandler.event import Event
 from fsmhandler.fsm import FSMEventHandler
 from fsmhandler.fsm import StateHandler
 from queue import Queue as EventQueue
 
 # custom states
-from dim_timer_state import DimTimerState
-from idlestate import IdleState
-from toggle_timer_state import ToggleTimerState
-from color_switcher import ColorSwitcherState
-from dimmer_state import DimmerState
+from states.dim_timer_state import DimTimerState
+from states.idlestate import IdleState
+from states.toggle_timer_state import ToggleTimerState
+from states.color_switcher import ColorSwitcherState
+from states.dimmer_state import DimmerState
 
 parser = argparse.ArgumentParser(description='program to control a light in home assistant')
 parser.add_argument('-k', action='store_true', help='this option enables input from the spacebar')

@@ -1,5 +1,5 @@
 
-from event import Event
+from fsmhandler.event import Event
 from fsmhandler.fsm import StateHandler
 from threading import Timer
 
